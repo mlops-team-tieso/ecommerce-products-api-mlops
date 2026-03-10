@@ -3,7 +3,7 @@ from datetime import datetime, timezone
 
 def build_product(product_id: str, data: dict) -> dict:
     return {
-        "id": product_id,
+        "productID": product_id,
         "name": data["name"],
         "description": data.get("description", ""),
         "category": data["category"],
@@ -17,7 +17,7 @@ def build_product(product_id: str, data: dict) -> dict:
 
 def format_product(item: dict) -> dict:
     return {
-        "id": item["id"],
+        "id": item["productID"],
         "name": item["name"],
         "description": item.get("description", ""),
         "category": item["category"],
