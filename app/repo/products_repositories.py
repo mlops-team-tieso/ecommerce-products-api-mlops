@@ -38,7 +38,7 @@ def get_all(category=None, min_price=None, max_price=None, available=None):
 
 def get_by_id(product_id: str):
     table = _get_table()
-    response = table.get_item(Key={"id": product_id})
+    response = table.get_item(Key={"productID": product_id})
     return response.get("Item")
 
 
@@ -62,7 +62,7 @@ def update(product_id: str, data: dict):
         update_parts.append(f"{safe_key} = :{key}")
 
     response = table.update_item(
-        Key={"id": product_id},
+        Key={"productID": product_id},
         UpdateExpression="SET " + ", ".join(update_parts),
         ExpressionAttributeValues=expression_values,
         ExpressionAttributeNames=expression_names,
@@ -75,7 +75,7 @@ def update_stock(product_id: str, stock: int):
     table = _get_table()
     available = stock > 0
     response = table.update_item(
-        Key={"id": product_id},
+        Key={"productID": product_id},
         UpdateExpression="SET #stock = :stock, #available = :available",
         ExpressionAttributeNames={"#stock": "stock", "#available": "available"},
         ExpressionAttributeValues={":stock": stock, ":available": available},
