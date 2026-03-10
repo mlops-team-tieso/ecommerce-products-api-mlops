@@ -3,6 +3,7 @@ import time
 
 import boto3
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from mangum import Mangum
 
 from app.api.products_routes import router as products_router
@@ -24,6 +25,15 @@ def _check_dynamodb() -> dict:
 
 def create_app() -> FastAPI:
     app = FastAPI(title="Products Service", version="1.0.0")
+
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=[
+            "http://team2-ecommerce-frontend.s3-website-us-east-1.amazonaws.com",
+        ],
+        allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+        allow_headers=["Content-Type"],
+    )
 
     @app.get("/", tags=["health"])
     def health_check():
