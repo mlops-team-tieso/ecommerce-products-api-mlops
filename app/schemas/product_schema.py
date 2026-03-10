@@ -1,3 +1,5 @@
+from uuid import UUID
+
 from pydantic import BaseModel, Field
 from typing import Optional
 
@@ -39,7 +41,7 @@ class StockUpdate(BaseModel):
 
 
 class ProductResponse(BaseModel):
-    id: str
+    id: UUID
     name: str
     description: str
     category: str
