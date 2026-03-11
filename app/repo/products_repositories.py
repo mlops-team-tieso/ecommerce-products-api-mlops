@@ -14,19 +14,27 @@ def get_all(category=None, min_price=None, max_price=None, available=None):
 
     if category:
         condition = Attr("category").eq(category)
-        filter_expression = condition if filter_expression is None else filter_expression & condition
+        filter_expression = (
+            condition if filter_expression is None else filter_expression & condition
+        )
 
     if min_price is not None:
         condition = Attr("price").gte(str(min_price))
-        filter_expression = condition if filter_expression is None else filter_expression & condition
+        filter_expression = (
+            condition if filter_expression is None else filter_expression & condition
+        )
 
     if max_price is not None:
         condition = Attr("price").lte(str(max_price))
-        filter_expression = condition if filter_expression is None else filter_expression & condition
+        filter_expression = (
+            condition if filter_expression is None else filter_expression & condition
+        )
 
     if available is not None:
         condition = Attr("available").eq(available)
-        filter_expression = condition if filter_expression is None else filter_expression & condition
+        filter_expression = (
+            condition if filter_expression is None else filter_expression & condition
+        )
 
     scan_kwargs = {}
     if filter_expression is not None:
@@ -38,7 +46,7 @@ def get_all(category=None, min_price=None, max_price=None, available=None):
 
 def get_by_id(product_id: str):
     table = _get_table()
-    response = table.get_item(Key={"productID": product_id})
+    response = table.get_item(Key={"id": product_id})
     return response.get("Item")
 
 
@@ -62,7 +70,7 @@ def update(product_id: str, data: dict):
         update_parts.append(f"{safe_key} = :{key}")
 
     response = table.update_item(
-        Key={"productID": product_id},
+        Key={"id": product_id},
         UpdateExpression="SET " + ", ".join(update_parts),
         ExpressionAttributeValues=expression_values,
         ExpressionAttributeNames=expression_names,
@@ -75,7 +83,7 @@ def update_stock(product_id: str, stock: int):
     table = _get_table()
     available = stock > 0
     response = table.update_item(
-        Key={"productID": product_id},
+        Key={"id": product_id},
         UpdateExpression="SET #stock = :stock, #available = :available",
         ExpressionAttributeNames={"#stock": "stock", "#available": "available"},
         ExpressionAttributeValues={":stock": stock, ":available": available},
